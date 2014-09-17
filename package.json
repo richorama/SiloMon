@@ -1,7 +1,7 @@
 {
-  "name": "FarmHand",
+  "name": "SiloMon",
   "version": "0.0.0",
-  "description": "TestApp",
+  "description": "Monitor your Microsoft Orleans Silos",
   "main": "app.js",
   "author": {
     "name": "Richard.Astbury",
