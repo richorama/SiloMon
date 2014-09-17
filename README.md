@@ -2,6 +2,8 @@
 
 Monitor your [Microsoft Orleans](http://aka.ms/orleans) Silos.
 
+![silo](https://silomonne.azurewebsites.net/images/logo.png)
+
 SiloMon is hosted here [http://www.silomon.net](http://www.silomon.net).
 
 Or host the application yourself with Azure Websites.
