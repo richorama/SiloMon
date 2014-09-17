@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SiloMon</title>
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        window.appInsights = { queue: [], applicationInsightsId: null, accountId: null, appUserId: null, configUrl: null, start: function (n) { function u(n, t) { n[t] = function () { var i = arguments; n.queue.push(function () { n[t].apply(n, i) }) } } function f(n) { var t = document.createElement("script"); return t.type = "text/javascript", t.src = n, t.async = !0, t } function r() { i.appendChild(f("//az416426.vo.msecnd.net/scripts/ai.0.js")) } var i, t; this.applicationInsightsId = n; u(this, "logEvent"); u(this, "logPageView"); i = document.getElementsByTagName("script")[0].parentNode; this.configUrl === null ? r() : (t = f(this.configUrl), t.onload = r, t.onerror = r, i.appendChild(t)); this.start = function () { } } };
+
+        appInsights.start("45efa0af-5a3b-483d-b1a3-9d01a03f0525");
+        appInsights.logPageView();
+    </script>
+    <style>
+    .navbar-nav>li>a{
+        font-weight: bold;
+        font-size: smaller;
+        color: gray;
+    }
+    .navbar-text{
+        font-weight: bold;
+        font-size: smaller;
+        color: gray;
+    }
+    .menu{
+        border-bottom: 3px solid white;
+    }
+    .menu:hover{
+        border-bottom: 3px solid silver;
+    }
+    .menuActive{
+        border-bottom: 3px solid lightblue;
+        background:whitesmoke;
+    }
+    .menuActive:hover{
+        border-bottom: 3px solid lightblue;
+    }
+    h1{
+        font-weight: bold;
+        color: gray;
+    }
+    h2{
+        font-weight: bold;
+        color: gray;
+    }    
+    .beta{
+        font-weight:bold;
+        color:white;
+        font-size: 20px;
+    }
+    </style>
+</head>
+
+<body>
+    <a href="https://github.com/richorama/silomon"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <nav class="navbar navbar-static-top" role="navigation" id="nav" style="display:none; border-bottom:1px solid #eee">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#" style="color: gray; font-weight: bold;">SiloMon</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li id="farm-menu" class="menu"><a href="#/farm">FARM OVERVIEW</a></li>
+                <li id="storageAccounts-menu" class="menu"><a href="#/storageAccounts">STORAGE ACCOUNTS</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><p id="name" class="navbar-text"></p></li>
+                <li><div><a alt="Refresh" href="javascript:void(0);" class="btn btn-default navbar-btn" id="refresh"><span class="glyphicon glyphicon-refresh"></span></a></div></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" id="main">
+        <div class="jumbotron" style="background:lightblue">
+            <div style="color: white; text-shadow: 0 1px 3px rgba(0, 0, 0, .5), 0 0 30px rgba(0, 0, 0, .075); font-weight: bold;" class="pull-right beta">BETA</div>
+            <img src="/images/logo.png" width="100" height="237" alt="logo" class="pull-left" style="margin-right:20px" />
+            <h1 style="color: white; text-shadow: 0 1px 3px rgba(0, 0, 0, .5), 0 0 30px rgba(0, 0, 0, .075); letter-spacing: -3px; font-weight: bold;">Welcome to SiloMon!</h1>
+            <p>SiloMon will watch your Microsoft Orleans silos<br />Log In to get started</p>
+            <p>Log in with <a class="btn btn-success btn-lg" role="button" href="/auth/google">Google &raquo;</a> or <a class="btn btn-success btn-lg" role="button" href="/auth/windowslive">Windows Live &raquo;</a></p>
+        </div>
+
+        <div class="row" style="margin-bottom:75px">
+            <div class="pull-right"><img style="margin:10px" src="/images/FarmOverview.png"/></div>
+            <h2>Get a Quick Overview of your Orleans Farm</h2>
+            <div class="lead">See how many grains are activated and get information about the load on the machine.</div>
+            <div>We'll display the farm health information as captured in Azure Table Storage.</div>
+        </div>
+
+        <div class="row" style="margin-bottom:75px"> 
+            <div class="pull-left"><img style="margin:10px" src="/images/FarmGraph.png"/></div>
+            <h2>Drill into Grain Activation Trends</h2>
+            <div class="lead">See how grain activations have increased over time on each of the servers in your farm.</div>
+            <div>SiloMon reads the tables in Azure Storage to plot activation trends on a graph.</div>
+        </div>
+
+        <div class="row" style="margin-bottom:75px"> 
+            <div class="pull-right"><img style="margin:10px" src="/images/FarmConfiguration.png"/></div>
+            <h2>No Installation Necessary</h2>
+            <div class="lead">Just configure diagnostics in your Azure deployment.</div>
+            <div>To start using SiloMon, just make sure you've set the 'DataConnectionString' setting in your Cloud Project. Then add those connection string details to SiloMon. We'll do the rest.</div>
+        </div>
+
+        <div>&copy; Richard Astbury 2014</div>
+            
+    </div>
+
+
+    <script id="siloMetrics-template" type="text/x-handlebars-template">
+        <h1>Farm Overview</h1>
+        <p><a href="#/storageAccounts">Manage Storage Accounts &raquo;</a></p>
+        <table class="table">
+            {{#each farms}}
+            <tr class="active"><th colspan="6"><h3><a href="#/stats/{{account}}/{{deploymentId}}">Orleans Farm: {{name}} &raquo;</a> <small>(from the {{account}} storage account)</small></h3></th></tr>
+            <tr class="active">
+                <th>Machine (Instance/Address/HostName)</th>
+                <th>Load</th>
+                <th>Grain Activations</th>
+                <th>Clients</th>
+                <th>Queues (Receive/Request/Send)</th>
+                <th>Messages (in/out)</th>
+            </tr>
+            {{#each silos}}
+            <tr>
+                <td style="border-left: 5px {{Health}} solid;"><strong>{{RowKey}}</strong><br />{{HostName}}<br />{{Address}} </td>
+                <td>{{CPU_formatted}} % CPU<br />{{Memory_formatted}} RAM</td>
+                <td>{{Activations}}</td>
+                <td>{{ClientCount}}</td>
+                <td>{{ReceiveQueue}} / {{RequestQueue}} / {{SendQueue}}</td>
+                <td>{{ReceivedMessages}} / {{SentMessages}}</td>
+            </tr>
+            {{/each}}
+            {{/each}}
+        </table>
+    </script>
+    <script id="noData-template" type="text/x-handlebars-template">
+        <a href="#/farm">&laquo; Back to Farm Overview</a>
+        <h2>You don't seem to have any data at the moment</h2>
+    </script>
+    <script id="siloStatistics-template" type="text/x-handlebars-template">
+        <h1>Grain Activations</h1>
+        <a href="#/farm">&laquo; Back to Farm Overview</a>
+        {{#each stats}}
+
+        <h2>{{name}}</h2>
+        <div id="{{id}}" style="min-width: 310px; height: 250px; margin: 0 auto"></div>
+        <div style="margin-bottom:25px;">&nbsp;</div>
+
+        {{/each}}
+        <div>Note times are in UTC</div>      
+    </script>
+
+    <script id="loading-template" type="text/x-handlebars-template">
+        Loading...
+    </script>
+
+    <script id="siloMetricsEmpty-template" type="text/x-handlebars-template">
+        <h2>You don't appear to have any storage accounts configured</h2>
+        <p>Silomon needs to access a storage account to retrieve the metrics for your Orleans farm</p>
+        <a href="#/addStorageAccount" class="btn btn-primary">Add a storage account &raquo;</a>
+    </script>
+
+    <script id="siloMetric-noData-template" type="text/x-handlebars-template">
+        <h2>You don't appear to have any Orleans Silos running</h2>
+        <p>This may be because Orleans is not running, you don't have the necessary storage account added to Silomon, or you need to configure the DataConnectionString setting in Orleans</p>
+        <a href="#/addStorageAccount" class="btn btn-primary">Add a storage account &raquo;</a>
+    </script>
+        
+    
+    <script id="listAccounts-template" type="text/x-handlebars-template">
+        <h1>Storage Accounts</h1>
+        <p><a href="#/farm">&laquo;  Back to Farm Overview</a> | <a href="#/addStorageAccount">Add A Storage Account  &raquo;</a></p>
+        <table class="table">
+            {{#each account}}
+                <tr><th>{{this}}</th><td><a href="#/deleteStorageAccount/{{this}}" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-trash"></span></a></td></tr>
+            {{/each}}
+        </table>
+    </script>
+
+    <div class="modal fade" id="addStorageAccountModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Please Enter a Windows Azure Storage Account and Key</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="control-group">
+                        <label class="control-label" for="storageAccount">Storage Account</label>
+                        <div class="controls">
+                            <input type="text" id="storageAccount" class="form-control" style="margin-bottom: 0px;">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="storageKey">Storage Key</label>
+                        <div class="controls">
+                            <input type="password" id="storageKey" class="form-control" style="margin-bottom: 0px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" href="#/cancelStorageAccount">Cancel</a>
+                    <a href="javascript:void(0);" class="btn btn-primary" id="addAccount">Add Account</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    
+    <script src="/javascripts/jquery-1.10.2.min.js"></script>
+        
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+    <script src="/javascripts/highcharts.js"></script>
+    <script src="/javascripts/browser.js"></script>
+</body>
+</html>

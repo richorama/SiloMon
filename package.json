@@ -1,0 +1,21 @@
+{
+  "name": "FarmHand",
+  "version": "0.0.0",
+  "description": "TestApp",
+  "main": "app.js",
+  "author": {
+    "name": "Richard.Astbury",
+    "email": "Richard.Astbury@gmail.com"
+  },
+  "dependencies": {
+    "express": "3.4.4",
+    "hogan-express": "~0.5.2",
+    "azure": "~0.8.1",
+    "humanize": "0.0.9",
+    "passport": "~0.2.0",
+    "passport-google": "~0.3.0",
+    "jwt-simple": "~0.2.0",
+    "passport-google-oauth": "~0.1.5",
+    "passport-windowslive": "~1.0.1"
+  }
+}
