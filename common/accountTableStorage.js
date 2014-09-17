@@ -4,7 +4,7 @@ var crypto = require('crypto');
 var SubscriptionTable = "usersubscription";
 var UserLog = "userlog";
 
-var tableClient = azure.createTableService(process.env.STORAGE_NAME, process.env.STORAGE_KEY;
+var tableClient = azure.createTableService(process.env.STORAGE_NAME, process.env.STORAGE_KEY);
 
 tableClient.createTable(SubscriptionTable, console.log);
 tableClient.createTable(UserLog, console.log);
