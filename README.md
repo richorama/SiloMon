@@ -8,6 +8,8 @@ SiloMon is hosted here [http://www.silomon.net](http://www.silomon.net).
 
 Or host the application yourself with Azure Websites.
 
+## Configuration
+
 The following environment variables must be set:
 
 * `CRYPTO_KEY` - a key used to encrypt the storage account keys. This can be any random text.
@@ -20,3 +22,7 @@ The following environment variables must be set:
 * `GOOGLE_CLIENT_ID` - your Google client ID.
 * `GOOGLE_CLIENT_SECRET` - your Google secret.
 * `GOOGLE_CALLBACK` - the callback url for Google (i.e. `http://www.silomon.net/auth/google/callback`)
+
+## License
+
+MIT
