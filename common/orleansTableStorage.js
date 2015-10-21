@@ -29,7 +29,7 @@ module.exports = function ( accountName, accountKey ) {
     function pageResults(entities, continuationToken, cb){
         continuationToken.getNextPage(function(error, results, newContinuationToken){
             entities = entities.concat(results);
-            if (!error && newContinuationToken.nextPartitionKey){
+            if (!error && newContinuationToken.nextPartitionKey && entities.length < 1000){
                 pageResults(entities, newContinuationToken, cb);
             } else {
                 cb(error, entities);
@@ -76,14 +76,23 @@ module.exports = function ( accountName, accountKey ) {
             });
         },
         getSiloStatistics: function ( deploymentId, dateTime, cb ) {
+            /*
             var date = new Date( dateTime );
+
+            // calculate the current 
+            var x = 3155378975999999999 - (621355968000000000 + (new Date().getTime() * 10000));
+            x = x - (x % 36000000000);
+            x = x + (36000000000 * 3);
+            */
+            
             var query = azure.TableQuery.select().from( OrleansSiloStatistics )
-                .where( "PartitionKey eq ?", deploymentId + ":" + formatDate( date ) );
+                .where( "PartitionKey gt '" + deploymentId + "$0000' and PartitionKey lt '" + deploymentId + "$9999'",'' );
                 //.and( "Timestamp gt ?", date.toISOString() );
             queryEntities( query, function ( err, results ) {
                 results = mungeTableResults( results );
-                results = filterStatResults(results);
-                results = fixStats(results);
+                //results = filterStatResults(results);
+                //console.log(results);
+                //results = fixStats(results);
                 cb( err, results );
             });
         }

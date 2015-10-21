@@ -171,54 +171,91 @@ $(document).ready(function(){
             refresh = function(){
                 get("/OrleansSiloStatistics/" + account + "/" + deploymentId, function(rawdata){
                     
-                    var metrics = rawdata.metrics;
-                    var hostnames = rawdata.hostnames
-                    
-                    if (!rawdata || !rawdata.hostnames || Object.keys(rawdata.hostnames).length === 0){
+                    if (!rawdata || rawdata.length === 0){
                         render("noData-template");   
                         return;
                     }
 
-                    render("siloStatistics-template", {name:deploymentId, stats: Object.keys(hostnames).map(function(x){return {id:x.replace(/[.]/g, "_"),name:x}})});
+                    var metrics = {};
+                    var hostnames = {};
+                    rawdata.forEach(function(x){
+                        metrics[x.Statistic] = (metrics[x.Statistic] || 0) + 1;
+                        hostnames[x.Name] = true;
+                    });
 
-                    var toNumber = function(x){return Number(x.StatValue)};
+                    console.log(metrics);
+                    console.log(hostnames);
 
-                    for (var name in hostnames){
-                        var hostname = hostnames[name];
-                        var stats = [];
-                        for (var key in metrics){
-                            var metric = metrics[key];
-                            if (metric.Name === name){
-                                var data = metric.values;
-                                stats.push({
-                                    type: 'line',
-                                    name: metric.Statistic,
-                                    pointInterval: (data[data.length - 1].Time - data[0].Time) /  data.length,
-                                    pointStart: data[0].Time,
-                                    data: data.map(toNumber)
+                    hostnames = Object.keys(hostnames).sort();
+
+                    var metricTotals = Object.keys(metrics).sort().map(function(x){
+                        return {name:x, count:metrics[x]}
+                    })
+                    render("siloStatistics-template", {name:deploymentId, metrics: metricTotals});
+
+                    $(".series-checkbox").change(function(e){
+                        console.log(e.target.id, e.target.checked);
+
+                        var colors = {};
+
+                        if (e.target.checked){
+                            hostnames.forEach(function(host){
+                                var data = rawdata.filter(function(x){
+                                    return x.Statistic === e.target.id && x.Name === host;
                                 });
+
+                                if (!data.length) return;
+                                console.log(data.map(function(x){return Number(x.StatValue);}));
+
+                                var series =  {
+                                    ref : e.target.id,
+                                    type: 'line',
+                                    name: e.target.id + " - " + host,
+                                    pointInterval: (new Date(data[data.length - 1].Timestamp).getTime() - new Date(data[0].Timestamp).getTime()) /  data.length,
+                                    pointStart: new Date(data[0].Timestamp).getTime(),
+                                    data: data.map(function(x){return Number(x.StatValue);})
+                                }
+                                var x= $(chart).highcharts().addSeries(series);
+                                colors[host] = x.color;
+                            });
+                           
+                            var text = Object.keys(colors).map(function(hostKey){
+                                return '<span style="color:' + colors[hostKey] +'">' + hostKey + "</span>"
+                            }).join(" ")
+
+                            $("#legend-" + e.target.id.replace(/\./g, "\\.")).html("<small><strong>" + text + "</strong></small>");
+
+                            return;
+                        } 
+
+                        // remove series
+                        var removeList = $(chart).highcharts().series.filter(function(x){
+                            return x.name.split(" - ")[0] === e.target.id;
+                        });
+                        removeList.forEach(function(x){
+                            x.remove();
+                        });
+                        $("#legend-" + e.target.id.replace(/\./g, "\\.")).html("");
+
+
+                    });
+
+                    var chart = $("#chart").highcharts({
+                        chart: { type: 'column' },
+                        title: { text: '' },
+                        xAxis: { type: 'datetime' },
+                        yAxis: { title: { text: '' }, min: 0 },
+                        legend: false,
+                        plotOptions: {
+                            area: {
+                                stacking: 'normal',
+                                dataLabels: {
+                                    enabled: true
+                                }
                             }
                         }
-
-                        $("#" + name.replace(/[.]/g, "_")).highcharts({
-                            chart: { type: 'column' },
-                            title: { text: '' },
-                            xAxis: { type: 'datetime' },
-                            yAxis: { title: { text: '' }, min: 0 },
-                            legend: { enabled: false },
-
-                            plotOptions: {
-                                area: {
-                                    stacking: 'normal',
-                                    dataLabels: {
-                                        enabled: true
-                                    }
-                                }
-                            },
-        
-                            series: stats
-                        });
-                    }
+                    });
+                  
                 });
             }
             refresh();

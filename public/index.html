@@ -61,6 +61,9 @@
         color:white;
         font-size: 20px;
     }
+    small{
+        color:#aaa;
+    }
     </style>
 </head>
 
@@ -151,15 +154,22 @@
         <h2>You don't seem to have any data at the moment</h2>
     </script>
     <script id="siloStatistics-template" type="text/x-handlebars-template">
-        <h1>Grain Activations</h1>
+        <h1>Silo Statistics</h1>
         <a href="#/farm">&laquo; Back to Farm Overview</a>
-        {{#each stats}}
-
-        <h2>{{name}}</h2>
-        <div id="{{id}}" style="min-width: 310px; height: 250px; margin: 0 auto"></div>
+        
+        <div id="chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
         <div style="margin-bottom:25px;">&nbsp;</div>
 
+        <strong>Select metrics to add to the chart</strong>
+        <table class="table">
+        {{#each metrics}}
+            <tr>
+                <td><input type="checkbox" id="{{name}}" class="series-checkbox"/> {{name}}</td>
+                <td><small>{{count}} data points</small></td>
+                <td><span id="legend-{{name}}"></span></td>
+            </tr>
         {{/each}}
+        </table>
         <div>Note times are in UTC</div>      
     </script>
 

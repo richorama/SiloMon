@@ -101,8 +101,8 @@ var auth = function(req, res, next){
     }
 }
 
-require('./controllers/api.js')(app, auth);
-require('./controllers/account.js')(app, auth);
+require('./controllers/api')(app, auth);
+require('./controllers/account')(app, auth);
 
 app.get('/', function(req, res){
     res.sendfile("public/index.html");
@@ -117,10 +117,10 @@ app.get('/ping', auth, function(req, res){
     }
 });
 
-http.createServer(app).listen(app.get('port'), function(){
-    console.log('Express is listening on port ' + app.get('port'));
-});
-
 app.get("/user", auth, function(req, res){
     res.json(req.user);
+});
+
+http.createServer(app).listen(app.get('port'), function(){
+    console.log('Express is listening on port ' + app.get('port'));
 });
